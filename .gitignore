@@ -1,0 +1,21 @@
+__pycache__/
+*.pyc
+.venv/
+.idea/
+.vscode/
+node_modules/
+
+# Solr runtime artefacts (we keep configset/, but not generated indexes)
+*.log
+solr.log*
+*-console.log
+**/data/
+**/zoo_data/
+**/*_replica_*/
+
+# Python / pip cache
+.pytest_cache/
+
+# OS junk
+Thumbs.db
+.DS_Store

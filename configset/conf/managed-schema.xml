@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema name="books-schema" version="1.6">
+
+    <!-- =====================================================================
+         FIELD TYPES
+         A variety of field types are defined to demonstrate different indexing
+         strategies (string vs text vs trie numeric vs date) for the Books
+         dataset used in this open-ended lab.
+         ===================================================================== -->
+
+    <fieldType name="string"   class="solr.StrField"        sortMissingLast="true" docValues="true"/>
+    <fieldType name="boolean"  class="solr.BoolField"       sortMissingLast="true"/>
+    <fieldType name="pint"     class="solr.IntPointField"   docValues="true"/>
+    <fieldType name="plong"    class="solr.LongPointField"  docValues="true"/>
+    <fieldType name="pfloat"   class="solr.FloatPointField" docValues="true"/>
+    <fieldType name="pdouble"  class="solr.DoublePointField" docValues="true"/>
+    <fieldType name="pdate"    class="solr.DatePointField"  docValues="true"/>
+
+    <!-- General full-text English type with stemming, stop-words and lower-casing.
+         Used for description and title (along with text_general). -->
+    <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
+        <analyzer type="index">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+            <filter class="solr.EnglishPossessiveFilterFactory"/>
+            <filter class="solr.PorterStemFilterFactory"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+            <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+            <filter class="solr.EnglishPossessiveFilterFactory"/>
+            <filter class="solr.PorterStemFilterFactory"/>
+        </analyzer>
+    </fieldType>
+
+    <!-- Generic text field for facet-friendly tokenisation without stemming. -->
+    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100" multiValued="true">
+        <analyzer type="index">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+            <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+    </fieldType>
+
+    <!-- Edge-ngram field used to drive the autocomplete / type-ahead feature. -->
+    <fieldType name="text_suggest" class="solr.TextField" positionIncrementGap="100">
+        <analyzer type="index">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+            <filter class="solr.EdgeNGramFilterFactory" minGramSize="2" maxGramSize="20"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+    </fieldType>
+
+    <!-- =====================================================================
+         FIELDS
+         ===================================================================== -->
+
+    <field name="id"            type="string"  indexed="true"  stored="true"  required="true" multiValued="false"/>
+    <field name="_version_"     type="plong"   indexed="false" stored="false"/>
+    <field name="_root_"        type="string"  indexed="true"  stored="false" docValues="false"/>
+
+    <!-- Primary searchable / displayable fields. The unified highlighter
+         (Solr 10 default) requires storeOffsetsWithPositions=true on any
+         field used for hl.fl. -->
+    <field name="title"         type="text_en"      indexed="true"  stored="true"  multiValued="false"
+                                termVectors="true"  termPositions="true" termOffsets="true"
+                                storeOffsetsWithPositions="true"/>
+    <field name="description"   type="text_en"      indexed="true"  stored="true"  multiValued="false"
+                                termVectors="true"  termPositions="true" termOffsets="true"
+                                storeOffsetsWithPositions="true"/>
+
+    <!-- String fields used for exact matching, faceting and sorting. -->
+    <field name="category"      type="string"       indexed="true"  stored="true"  docValues="true" multiValued="false"/>
+    <field name="publisher"     type="string"       indexed="true"  stored="true"  docValues="true" multiValued="false"/>
+    <field name="language"      type="string"       indexed="true"  stored="true"  docValues="true" multiValued="false"/>
+
+    <!-- Multi-valued fields. -->
+    <field name="authors"       type="string"       indexed="true"  stored="true"  docValues="true" multiValued="true"/>
+    <field name="tags"          type="string"       indexed="true"  stored="true"  docValues="true" multiValued="true"/>
+
+    <!-- Numeric & date fields (range / sort friendly). -->
+    <field name="pages"         type="pint"         indexed="true"  stored="true"/>
+    <field name="price"         type="pfloat"       indexed="true"  stored="true"/>
+    <field name="rating"        type="pfloat"       indexed="true"  stored="true"/>
+    <field name="in_stock"      type="boolean"      indexed="true"  stored="true"/>
+    <field name="publish_date"  type="pdate"        indexed="true"  stored="true"/>
+
+    <!-- Catch-all field used by the default search handler. Multiple source
+         fields are copied here so a single user-supplied query can match
+         across title, description, authors, tags, category & publisher. -->
+    <field name="text"          type="text_general" indexed="true"  stored="false" multiValued="true"/>
+
+    <!-- Suggestion / autocomplete field. -->
+    <field name="suggest"       type="text_suggest" indexed="true"  stored="false" multiValued="true"/>
+
+    <uniqueKey>id</uniqueKey>
+
+    <!-- =====================================================================
+         COPY FIELDS
+         ===================================================================== -->
+    <copyField source="title"       dest="text"/>
+    <copyField source="description" dest="text"/>
+    <copyField source="authors"     dest="text"/>
+    <copyField source="tags"        dest="text"/>
+    <copyField source="category"    dest="text"/>
+    <copyField source="publisher"   dest="text"/>
+
+    <copyField source="title"       dest="suggest"/>
+    <copyField source="authors"     dest="suggest"/>
+    <copyField source="tags"        dest="suggest"/>
+    <copyField source="category"    dest="suggest"/>
+
+</schema>

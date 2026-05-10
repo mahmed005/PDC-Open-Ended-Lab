@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SolrShelf - Books Search</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">SolrShelf</span>
+      <span class="tagline">technical books, indexed by Apache Solr</span>
+    </div>
+
+    <div class="search-wrap">
+      <input id="q" type="search" placeholder="Search for books, authors, topics...
+                  (try 'java', 'design', 'data')" autocomplete="off">
+      <button id="searchBtn">Search</button>
+      <ul id="suggest" class="suggest-list" hidden></ul>
+    </div>
+
+    <div class="cluster-status" id="cluster">connecting...</div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <h3>Sort</h3>
+      <select id="sort">
+        {% for key, _ in sort_options.items() %}
+          <option value="{{ key }}">{{ key.replace('_', ' ').title() }}</option>
+        {% endfor %}
+      </select>
+
+      <h3>Page size</h3>
+      <select id="pageSize">
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+      </select>
+
+      <h3>Availability</h3>
+      <label class="toggle">
+        <input type="checkbox" id="inStock"> In stock only
+      </label>
+
+      <h3>Price (USD)</h3>
+      <div class="range-pair">
+        <input type="number" id="priceMin" placeholder="min" min="0" step="1">
+        <input type="number" id="priceMax" placeholder="max" min="0" step="1">
+      </div>
+
+      <h3>Minimum rating</h3>
+      <input type="range" id="ratingMin" min="0" max="5" step="0.5" value="0">
+      <span id="ratingMinLabel">0.0</span>
+
+      <h3>Category</h3>
+      <ul class="facet" id="facet-category"></ul>
+
+      <h3>Publisher</h3>
+      <ul class="facet" id="facet-publisher"></ul>
+
+      <h3>Tags</h3>
+      <ul class="facet" id="facet-tags"></ul>
+
+      <button id="resetBtn" class="reset">Reset filters</button>
+    </aside>
+
+    <section class="results">
+      <div class="results-header">
+        <span id="meta"></span>
+        <a id="rawSolrLink" href="#" target="_blank" rel="noopener">view raw Solr response &raquo;</a>
+      </div>
+
+      <div id="spell" class="spell" hidden></div>
+
+      <div id="rangeFacet" class="range-facet" hidden>
+        <h4>Price distribution</h4>
+        <div id="priceBars" class="bars"></div>
+      </div>
+
+      <ul id="hits" class="hits"></ul>
+
+      <nav id="pager" class="pager"></nav>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Apache Solr 10 &middot; SolrCloud (2 shards &times; 2 replicas) &middot;
+    <a href="http://localhost:8983/solr/#/" target="_blank">Solr Admin UI</a>
+  </footer>
+
+  <script>
+    window.PAGE_SIZE_DEFAULT = {{ page_size_default }};
+  </script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

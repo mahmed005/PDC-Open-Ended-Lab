@@ -1,0 +1,992 @@
+# Solr query results
+
+--- Q1  full-text 'python' ---
+URL     : http://localhost:8983/solr/books/select?q=python&fl=id%2Ctitle%2Cprice&rows=5
+QTime   : 13 ms (server)   wall: 2098.94 ms
+numFound: 4
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 13,
+    "params": {
+      "q": "python",
+      "fl": "id,title,price",
+      "rows": "5"
+    }
+  },
+  "response": {
+    "numFound": 4,
+    "start": 0,
+    "maxScore": 5.6360817,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "id": "BK011",
+        "title": "Python Crash Course",
+        "price": 39.95
+      },
+      {
+        "id": "BK012",
+        "title": "Fluent Python",
+        "price": 54.99
+      },
+      {
+        "id": "BK040",
+        "title": "Natural Language Processing with Python",
+        "price": 49.99
+      },
+      {
+        "id": "BK018",
+        "title": "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow",
+        "price": 69.99
+      }
+    ]
+  }
+}
+
+--- Q2  edismax 'java' boosted ---
+URL     : http://localhost:8983/solr/books/select?q=java&defType=edismax&qf=title%5E4+description%5E2+authors%5E2+tags&fl=id%2Ctitle%2Cscore&rows=5
+QTime   : 15 ms (server)   wall: 2075.17 ms
+numFound: 2
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 15,
+    "params": {
+      "q": "java",
+      "defType": "edismax",
+      "qf": "title^4 description^2 authors^2 tags",
+      "fl": "id,title,score",
+      "rows": "5"
+    }
+  },
+  "response": {
+    "numFound": 2,
+    "start": 0,
+    "maxScore": 5.7421765,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "id": "BK007",
+        "title": "Effective Java",
+        "score": 5.7421765
+      },
+      {
+        "id": "BK006",
+        "title": "Lucene in Action",
+        "score": 2.1378996
+      }
+    ]
+  }
+}
+
+--- Q3  phrase 'Definitive Guide' ---
+URL     : http://localhost:8983/solr/books/select?q=title%3A%22Definitive+Guide%22&fl=id%2Ctitle&rows=10
+QTime   : 7 ms (server)   wall: 2044.52 ms
+numFound: 5
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 7,
+    "params": {
+      "q": "title:\"Definitive Guide\"",
+      "fl": "id,title",
+      "rows": "10"
+    }
+  },
+  "response": {
+    "numFound": 5,
+    "start": 0,
+    "maxScore": 2.298741,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "id": "BK009",
+        "title": "Hadoop: The Definitive Guide"
+      },
+      {
+        "id": "BK010",
+        "title": "Kafka: The Definitive Guide"
+      },
+      {
+        "id": "BK021",
+        "title": "MongoDB: The Definitive Guide"
+      },
+      {
+        "id": "BK027",
+        "title": "Spark: The Definitive Guide"
+      },
+      {
+        "id": "BK028",
+        "title": "Elasticsearch: The Definitive Guide"
+      }
+    ]
+  }
+}
+
+--- Q4  wildcard title:Pyth* ---
+URL     : http://localhost:8983/solr/books/select?q=title%3APyth%2A&fl=id%2Ctitle
+QTime   : 17 ms (server)   wall: 2057.53 ms
+numFound: 3
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 17,
+    "params": {
+      "q": "title:Pyth*",
+      "fl": "id,title"
+    }
+  },
+  "response": {
+    "numFound": 3,
+    "start": 0,
+    "maxScore": 1.0,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "id": "BK011",
+        "title": "Python Crash Course"
+      },
+      {
+        "id": "BK012",
+        "title": "Fluent Python"
+      },
+      {
+        "id": "BK040",
+        "title": "Natural Language Processing with Python"
+      }
+    ]
+  }
+}
+
+--- Q5  numeric range price [20..50] ---
+URL     : http://localhost:8983/solr/books/select?q=%2A%3A%2A&fq=price%3A%5B20+TO+50%5D&fl=id%2Ctitle%2Cprice&rows=20&sort=price+asc
+QTime   : 14 ms (server)   wall: 2080.89 ms
+numFound: 22
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 14,
+    "params": {
+      "q": "*:*",
+      "fl": "id,title,price",
+      "fq": "price:[20 TO 50]",
+      "sort": "price asc",
+      "rows": "20"
+    }
+  },
+  "response": {
+    "numFound": 22,
+    "start": 0,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "id": "BK031",
+        "title": "Docker Deep Dive",
+        "price": 29.99
+      },
+      {
+        "id": "BK013",
+        "title": "JavaScript: The Good Parts",
+        "price": 29.99
+      },
+      {
+        "id": "BK001",
+        "title": "The Pragmatic Programmer",
+        "price": 34.95
+      },
+      {
+        "id": "BK016",
+        "title": "System Design Interview - An Insider's Guide",
+        "price": 35.0
+      },
+      {
+        "id": "BK011",
+        "title": "Python Crash Course",
+        "price": 39.95
+      },
+      {
+        "id": "BK015",
+        "title": "Cracking the Coding Interview",
+        "price": 39.95
+      },
+      {
+        "id": "BK002",
+        "title": "Clean Code: A Handbook of Agile Software Craftsmanship",
+        "price": 39.99
+      },
+      {
+        "id": "BK005",
+        "title": "Apache Solr Search Patterns",
+        "price": 39.99
+      },
+      {
+        "id": "BK026",
+        "title": "The Go Programming Language",
+        "price": 39.99
+      },
+      {
+        "id": "BK036",
+        "title": "The Mythical Man-Month",
+        "price": 39.99
+      },
+      {
+        "id": "BK007",
+        "title": "Effective Java",
+        "price": 44.99
+      },
+      {
+        "id": "BK010",
+        "title": "Kafka: The Definitive Guide",
+        "price": 47.99
+      },
+      {
+        "id": "BK029",
+        "title": "Site Reliability Engineering",
+        "price": 47.99
+      },
+      {
+        "id": "BK033",
+        "title": "Refactoring: Improving the Design of Existing Code",
+        "price": 47.99
+      },
+      {
+        "id": "BK006",
+        "title": "Lucene in Action",
+        "price": 49.9
+
+--- Q6  date range publish_date>=2018 ---
+URL     : http://localhost:8983/solr/books/select?q=%2A%3A%2A&fq=publish_date%3A%5B2018-01-01T00%3A00%3A00Z+TO+NOW%5D&sort=publish_date+desc&fl=id%2Ctitle%2Cpublish_date&rows=10
+QTime   : 10 ms (server)   wall: 2097.77 ms
+numFound: 13
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 10,
+    "params": {
+      "q": "*:*",
+      "fl": "id,title,publish_date",
+      "fq": "publish_date:[2018-01-01T00:00:00Z TO NOW]",
+      "sort": "publish_date desc",
+      "rows": "10"
+    }
+  },
+  "response": {
+    "numFound": 13,
+    "start": 0,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "id": "BK025",
+        "title": "Programming Rust",
+        "publish_date": "2021-07-06T00:00:00Z"
+      },
+      {
+        "id": "BK016",
+        "title": "System Design Interview - An Insider's Guide",
+        "publish_date": "2020-06-12T00:00:00Z"
+      },
+      {
+        "id": "BK031",
+        "title": "Docker Deep Dive",
+        "publish_date": "2020-05-25T00:00:00Z"
+      },
+      {
+        "id": "BK014",
+        "title": "You Don't Know JS Yet: Get Started",
+        "publish_date": "2020-01-28T00:00:00Z"
+      },
+      {
+        "id": "BK021",
+        "title": "MongoDB: The Definitive Guide",
+        "publish_date": "2019-12-26T00:00:00Z"
+      },
+      {
+        "id": "BK018",
+        "title": "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow",
+        "publish_date": "2019-10-15T00:00:00Z"
+      },
+      {
+        "id": "BK011",
+        "title": "Python Crash Course",
+        "publish_date": "2019-05-03T00:00:00Z"
+      },
+      {
+        "id": "BK020",
+        "title": "Database System Concepts",
+        "publish_date": "2019-02-26T00:00:00Z"
+      },
+      {
+        "id": "BK033",
+        "title": "Refactoring: Improving the Design of Existing Code",
+        "publish_date": "2018-11-30T00:00:00Z"
+      },
+      {
+        "id": "BK039",
+        "title": "Reinforcement Learning: An Introduction",
+        "publish_date": "2018-11-13T00:00:00Z"
+      }
+    ]
+  }
+}
+
+--- Q7  boolean filter in_stock:true && rating>=4.5 ---
+URL     : http://localhost:8983/solr/books/select?q=%2A%3A%2A&fq=in_stock%3Atrue&fq=rating%3A%5B4.5+TO+%2A%5D&fl=id%2Ctitle%2Crating&rows=20
+QTime   : 12 ms (server)   wall: 2088.69 ms
+numFound: 21
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 12,
+    "params": {
+      "q": "*:*",
+      "fl": "id,title,rating",
+      "fq": [
+        "in_stock:true",
+        "rating:[4.5 TO *]"
+      ],
+      "rows": "20"
+    }
+  },
+  "response": {
+    "numFound": 21,
+    "start": 0,
+    "maxScore": 1.0,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "id": "BK001",
+        "title": "The Pragmatic Programmer",
+        "rating": 4.7
+      },
+      {
+        "id": "BK002",
+        "title": "Clean Code: A Handbook of Agile Software Craftsmanship",
+        "rating": 4.6
+      },
+      {
+        "id": "BK003",
+        "title": "Introduction to Algorithms",
+        "rating": 4.5
+      },
+      {
+        "id": "BK008",
+        "title": "The Art of Computer Programming, Volumes 1-4A",
+        "rating": 4.9
+      },
+      {
+        "id": "BK011",
+        "title": "Python Crash Course",
+        "rating": 4.7
+      },
+      {
+        "id": "BK015",
+        "title": "Cracking the Coding Interview",
+        "rating": 4.5
+      },
+      {
+        "id": "BK016",
+        "title": "System Design Interview - An Insider's Guide",
+        "rating": 4.6
+      },
+      {
+        "id": "BK025",
+        "title": "Programming Rust",
+        "rating": 4.6
+      },
+      {
+        "id": "BK026",
+        "title": "The Go Programming Language",
+        "rating": 4.5
+      },
+      {
+        "id": "BK031",
+        "title": "Docker Deep Dive",
+        "rating": 4.6
+      },
+      {
+        "id": "BK033",
+        "title": "Refactoring: Improving the Design of Existing Code",
+        "rating": 4.5
+      },
+      {
+        "id": "BK004",
+        "title": "Designing Data-Intensive Applications",
+        "rating": 4.8
+      },
+      {
+        "id": "BK007",
+        "title": "Effective Java",
+        "rating": 4.7
+      },
+      {
+        "id": "BK012",
+        "title": "Fluent Python",
+        "rating": 4.6
+      },
+      {
+        "id": "BK014",
+        "title": "You Don
+
+--- Q8  facets per category & publisher ---
+URL     : http://localhost:8983/solr/books/select?q=%2A%3A%2A&rows=0&facet=true&facet.field=category&facet.field=publisher&facet.field=tags&facet.mincount=1&facet.limit=20
+QTime   : 14 ms (server)   wall: 2069.11 ms
+numFound: 40
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 14,
+    "params": {
+      "q": "*:*",
+      "facet.limit": "20",
+      "facet.field": [
+        "category",
+        "publisher",
+        "tags"
+      ],
+      "facet.mincount": "1",
+      "rows": "0",
+      "facet": "true"
+    }
+  },
+  "response": {
+    "numFound": 40,
+    "start": 0,
+    "numFoundExact": true,
+    "docs": []
+  },
+  "facet_counts": {
+    "facet_queries": {},
+    "facet_fields": {
+      "category": [
+        "Programming Languages",
+        7,
+        "Software Engineering",
+        7,
+        "Computer Science",
+        6,
+        "Artificial Intelligence",
+        5,
+        "DevOps",
+        4,
+        "Distributed Systems",
+        4,
+        "Search Engines",
+        3,
+        "Career",
+        2,
+        "Databases",
+        2
+      ],
+      "publisher": [
+        "O'Reilly Media",
+        12,
+        "Addison-Wesley",
+        7,
+        "MIT Press",
+        4,
+        "Independently Published",
+        3,
+        "Manning Publications",
+        2,
+        "Pearson",
+        2,
+        "Prentice Hall",
+        2,
+        "CareerCup",
+        1,
+        "IT Revolution Press",
+        1,
+        "McGraw-Hill",
+        1,
+        "Microsoft Press",
+        1,
+        "No Starch Press",
+        1,
+        "Packt Publishing",
+        1,
+        "Springer",
+        1,
+        "Wiley",
+        1
+      ],
+      "tags": [
+        "academic",
+        9,
+        "best-practices",
+        6,
+        "classic",
+        4,
+        "fundamentals",
+        4,
+        "machine-learning",
+        4,
+        "programming",
+        4,
+        "python",
+        4,
+        "algorithms",
+        3,
+        "big-data",
+        3,
+        "databases",
+        3,
+        "lucene",
+        3,
+        "search",
+        3,
+        "career",
+        2,
+        "containers",
+        2,
+        "design",
+        2,
+        "devops",
+        2,
+        "interview",
+        2,
+        "javascript",
+
+
+--- Q9  range facet on price ---
+URL     : http://localhost:8983/solr/books/select?q=%2A%3A%2A&rows=0&facet=true&facet.range=price&facet.range.start=0&facet.range.end=200&facet.range.gap=20
+QTime   : 9 ms (server)   wall: 2063.57 ms
+numFound: 40
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 9,
+    "params": {
+      "facet.range": "price",
+      "q": "*:*",
+      "facet.range.gap": "20",
+      "rows": "0",
+      "facet": "true",
+      "facet.range.start": "0",
+      "facet.range.end": "200"
+    }
+  },
+  "response": {
+    "numFound": 40,
+    "start": 0,
+    "numFoundExact": true,
+    "docs": []
+  },
+  "facet_counts": {
+    "facet_queries": {},
+    "facet_fields": {},
+    "facet_ranges": {
+      "price": {
+        "counts": [
+          "0.0",
+          2,
+          "20.0",
+          10,
+          "40.0",
+          15,
+          "60.0",
+          5,
+          "80.0",
+          6,
+          "100.0",
+          0,
+          "120.0",
+          1,
+          "140.0",
+          0,
+          "160.0",
+          0,
+          "180.0",
+          1
+        ],
+        "gap": 20.0,
+        "start": 0.0,
+        "end": 200.0
+      }
+    },
+    "facet_intervals": {},
+    "facet_heatmaps": {}
+  }
+}
+
+--- Q10 highlight 'design' ---
+URL     : http://localhost:8983/solr/books/select?q=design&hl=true&hl.fl=title%2Cdescription&hl.simple.pre=%3Cmark%3E&hl.simple.post=%3C%2Fmark%3E&fl=id%2Ctitle&rows=5
+QTime   : 18 ms (server)   wall: 2092.56 ms
+numFound: 6
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 18,
+    "params": {
+      "q": "design",
+      "hl": "true",
+      "hl.simple.post": "</mark>",
+      "fl": "id,title",
+      "hl.fl": "title,description",
+      "rows": "5",
+      "hl.simple.pre": "<mark>"
+    }
+  },
+  "response": {
+    "numFound": 6,
+    "start": 0,
+    "maxScore": 4.597482,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "id": "BK004",
+        "title": "Designing Data-Intensive Applications"
+      },
+      {
+        "id": "BK034",
+        "title": "Domain-Driven Design"
+      },
+      {
+        "id": "BK016",
+        "title": "System Design Interview - An Insider's Guide"
+      },
+      {
+        "id": "BK033",
+        "title": "Refactoring: Improving the Design of Existing Code"
+      },
+      {
+        "id": "BK038",
+        "title": "Compilers: Principles, Techniques, and Tools"
+      }
+    ]
+  },
+  "highlighting": {
+    "BK004": {
+      "title": [
+        "<mark>Designing</mark> Data-Intensive Applications"
+      ]
+    },
+    "BK034": {
+      "title": [
+        "Domain-Driven <mark>Design</mark>"
+      ]
+    },
+    "BK016": {
+      "title": [
+        "System <mark>Design</mark> Interview - An Insider's Guide"
+      ],
+      "description": [
+        "An insider's guide to system <mark>design</mark> interviews with step-by-step frameworks."
+      ]
+    },
+    "BK033": {
+      "title": [
+        "Refactoring: Improving the <mark>Design</mark> of Existing Code"
+      ]
+    },
+    "BK038": {
+      "description": [
+        "The Dragon Book - the classic textbook on compiler <mark>design</mark>."
+      ]
+    }
+  }
+}
+
+--- Q11 sorting by rating desc, price asc ---
+URL     : http://localhost:8983/solr/books/select?q=%2A%3A%2A&sort=rating+desc%2C+price+asc&fl=id%2Ctitle%2Crating%2Cprice&rows=5
+QTime   : 10 ms (server)   wall: 2080.28 ms
+numFound: 40
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 10,
+    "params": {
+      "q": "*:*",
+      "fl": "id,title,rating,price",
+      "sort": "rating desc, price asc",
+      "rows": "5"
+    }
+  },
+  "response": {
+    "numFound": 40,
+    "start": 0,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "id": "BK008",
+        "title": "The Art of Computer Programming, Volumes 1-4A",
+        "price": 199.99,
+        "rating": 4.9
+      },
+      {
+        "id": "BK004",
+        "title": "Designing Data-Intensive Applications",
+        "price": 49.99,
+        "rating": 4.8
+      },
+      {
+        "id": "BK001",
+        "title": "The Pragmatic Programmer",
+        "price": 34.95,
+        "rating": 4.7
+      },
+      {
+        "id": "BK011",
+        "title": "Python Crash Course",
+        "price": 39.95,
+        "rating": 4.7
+      },
+      {
+        "id": "BK007",
+        "title": "Effective Java",
+        "price": 44.99,
+        "rating": 4.7
+      }
+    ]
+  }
+}
+
+--- Q12 grouping by category ---
+URL     : http://localhost:8983/solr/books/select?q=%2A%3A%2A&group=true&group.field=category&group.limit=2&fl=id%2Ctitle%2Ccategory
+QTime   : 13 ms (server)   wall: 2094.86 ms
+numFound: None  (grouped)
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 13,
+    "params": {
+      "q": "*:*",
+      "group.limit": "2",
+      "fl": "id,title,category",
+      "group.field": "category",
+      "group": "true"
+    }
+  },
+  "grouped": {
+    "category": {
+      "matches": 40,
+      "groups": [
+        {
+          "groupValue": "Distributed Systems",
+          "doclist": {
+            "numFound": 4,
+            "start": 0,
+            "maxScore": 1.0,
+            "numFoundExact": true,
+            "docs": [
+              {
+                "id": "BK010",
+                "title": "Kafka: The Definitive Guide",
+                "category": "Distributed Systems"
+              },
+              {
+                "id": "BK027",
+                "title": "Spark: The Definitive Guide",
+                "category": "Distributed Systems"
+              }
+            ]
+          }
+        },
+        {
+          "groupValue": "Software Engineering",
+          "doclist": {
+            "numFound": 7,
+            "start": 0,
+            "maxScore": 1.0,
+            "numFoundExact": true,
+            "docs": [
+              {
+                "id": "BK001",
+                "title": "The Pragmatic Programmer",
+                "category": "Software Engineering"
+              },
+              {
+                "id": "BK002",
+                "title": "Clean Code: A Handbook of Agile Software Craftsmanship",
+                "category": "Software Engineering"
+              }
+            ]
+          }
+        },
+        {
+          "groupValue": "Programming Languages",
+          "doclist": {
+            "numFound": 7,
+            "start": 0,
+            "maxScore": 1.0,
+            "numFoundExact": true,
+            "docs": [
+              {
+                "id": "BK011",
+                "title": "Python Crash Course",
+                "category": "Programming Languages"
+              },
+              {
+                "id": "BK025",
+                "title": "Programming Rust"
+... [truncated] ...
+
+--- Q13 stats on price ---
+URL     : http://localhost:8983/solr/books/select?q=%2A%3A%2A&rows=0&stats=true&stats.field=%7B%21min%3Dtrue+max%3Dtrue+mean%3Dtrue+sum%3Dtrue%7Dprice
+QTime   : 4 ms (server)   wall: 2079.50 ms
+numFound: 40
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 4,
+    "params": {
+      "q": "*:*",
+      "stats": "true",
+      "rows": "0",
+      "stats.field": "{!min=true max=true mean=true sum=true}price"
+    }
+  },
+  "response": {
+    "numFound": 40,
+    "start": 0,
+    "numFoundExact": true,
+    "docs": []
+  },
+  "stats": {
+    "stats_fields": {
+      "price": {
+        "min": 19.950000762939453,
+        "max": 199.99000549316406,
+        "sum": 2391.0000324249268,
+        "mean": 59.77500081062317
+      }
+    }
+  }
+}
+
+--- Q14 shard info ---
+URL     : http://localhost:8983/solr/books/select?q=%2A%3A%2A&rows=0&shards.info=true
+QTime   : 5 ms (server)   wall: 2041.24 ms
+numFound: 40
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 5,
+    "params": {
+      "q": "*:*",
+      "shards.info": "true",
+      "rows": "0"
+    }
+  },
+  "shards.info": {
+    "http://localhost:8983/solr/books_shard1_replica_n2/|http://localhost:7574/solr/books_shard1_replica_n6/": {
+      "numFound": 23,
+      "numFoundExact": true,
+      "maxScore": null,
+      "shardAddress": "http://localhost:8983/solr/books_shard1_replica_n2",
+      "time": 2
+    },
+    "http://localhost:7574/solr/books_shard2_replica_n4/|http://localhost:8983/solr/books_shard2_replica_n1/": {
+      "numFound": 17,
+      "numFoundExact": true,
+      "maxScore": null,
+      "shardAddress": "http://localhost:7574/solr/books_shard2_replica_n4",
+      "time": 3
+    }
+  },
+  "response": {
+    "numFound": 40,
+    "start": 0,
+    "numFoundExact": true,
+    "docs": []
+  }
+}
+
+--- Q15 combined UI-style query ---
+URL     : http://localhost:8983/solr/books/select?q=systems&defType=edismax&qf=title%5E4+description%5E2+authors%5E2+tags%5E1.5+category&fq=in_stock%3Atrue&fq=price%3A%5B%2A+TO+60%5D&facet=true&facet.field=category&facet.field=publisher&facet.range=price&facet.range.start=0&facet.range.end=200&facet.range.gap=20&hl=true&hl.fl=title%2Cdescription&hl.simple.pre=%3Cmark%3E&hl.simple.post=%3C%2Fmark%3E&sort=score+desc%2C+rating+desc&start=0&rows=5
+QTime   : 18 ms (server)   wall: 2084.22 ms
+numFound: 3
+{
+  "responseHeader": {
+    "zkConnected": true,
+    "status": 0,
+    "QTime": 18,
+    "params": {
+      "facet.range": "price",
+      "facet.field": [
+        "category",
+        "publisher"
+      ],
+      "facet.range.gap": "20",
+      "hl": "true",
+      "start": "0",
+      "fq": [
+        "in_stock:true",
+        "price:[* TO 60]"
+      ],
+      "sort": "score desc, rating desc",
+      "rows": "5",
+      "hl.simple.pre": "<mark>",
+      "q": "systems",
+      "defType": "edismax",
+      "hl.simple.post": "</mark>",
+      "qf": "title^4 description^2 authors^2 tags^1.5 category",
+      "hl.fl": "title,description",
+      "facet": "true",
+      "facet.range.start": "0",
+      "facet.range.end": "200"
+    }
+  },
+  "response": {
+    "numFound": 3,
+    "start": 0,
+    "maxScore": 2.9221058,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "id": "BK016",
+        "title": "System Design Interview - An Insider's Guide",
+        "authors": [
+          "Alex Xu"
+        ],
+        "category": "Career",
+        "tags": [
+          "system-design",
+          "interview",
+          "scalability"
+        ],
+        "publisher": "Independently Published",
+        "language": "English",
+        "pages": 322,
+        "price": 35.0,
+        "rating": 4.6,
+        "in_stock": true,
+        "publish_date": "2020-06-12T00:00:00Z",
+        "description": "An insider's guide to system design interviews with step-by-step frameworks.",
+        "_version_": 1864808935602520064
+      },
+      {
+        "id": "BK004",
+        "title": "Designing Data-Intensive Applications",
+        "authors": [
+          "Martin Kleppmann"
+        ],
+        "category": "Distributed Systems",
+        "tags": [
+          "databases",
+          "distributed",
+          "big-data"
+        ],
+        "publisher": "O'Reilly Media",
+        "language": "English",
+        "pages": 616,
+        "price": 49.99,
+        "rating": 4.8,
+        "in_stock": true,
+        "publish_date": "2017-03-16T00:00:00Z",
+
+... [truncated] ...
