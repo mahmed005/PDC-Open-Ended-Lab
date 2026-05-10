@@ -76,16 +76,6 @@ python web_app\app.py
 
 The UI provides: search bar, real-time results, autocomplete, filters & faceted navigation (category / publisher / tag / price / rating / availability), pagination, sorting, responsive layout, and `<mark>` highlighted matches.
 
-### 6. Regenerate screenshots / report
-
-```powershell
-python -m pip install playwright python-docx
-python -m playwright install chromium
-
-python screenshots\capture.py     # writes screenshots/01..13.png
-python docs\generate_report.py    # writes Lab_13_Report.docx
-```
-
 ## Project layout
 
 ```
@@ -96,20 +86,17 @@ pdc-open-ended-lab/
 ├── configset/conf/                # explicit managed-schema + solrconfig
 ├── queries/                       # 20 documented query patterns + harness
 ├── web_app/                       # Flask + vanilla JS front-end
-├── screenshots/                   # 13 captured PNGs + Playwright harness
-└── docs/                          # report generator
 ```
 
 ## Deliverables checklist
 
 | Item                                           | Location                          |
 | ---------------------------------------------- | --------------------------------- |
-| Problem statement                              | `Lab_13_Report.docx` §1           |
-| Dataset description                            | `Lab_13_Report.docx` §2 + `dataset/README.md` |
-| Configuration details                          | `Lab_13_Report.docx` §3 + `configset/`         |
-| Implementation steps (commands + code)         | `Lab_13_Report.docx` §4 + `queries/queries.md` |
-| Screenshots                                    | `Lab_13_Report.docx` §5 + `screenshots/`       |
-| Observations and analysis                      | `Lab_13_Report.docx` §6           |
-| Challenges and solutions                       | `Lab_13_Report.docx` §7           |
-| Conclusion                                     | `Lab_13_Report.docx` §8           |
-| GitHub repository                              | (see `docs/GITHUB.md`)            |
+| Problem statement                              | `Lab_13_Report.docx`           |
+| Dataset description                            | `Lab_13_Report.docx` + `dataset/README.md` |
+| Configuration details                          | `Lab_13_Report.docx` + `configset/`         |
+| Implementation steps (commands + code)         | `Lab_13_Report.docx` + `queries/queries.md` |
+| Observations and analysis                      | `Lab_13_Report.docx`           |
+| Challenges and solutions                       | `Lab_13_Report.docx`         |
+| Conclusion                                     | `Lab_13_Report.docx`        |
+| GitHub repository
